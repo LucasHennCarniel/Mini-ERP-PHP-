@@ -1,0 +1,22 @@
+{
+  "name": "mini-erp-laravel",
+  "description": "A mini ERP system built with Laravel.",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run development",
+    "development": "vite",
+    "build": "npm run production",
+    "production": "vite build",
+    "watch": "vite build --watch"
+  },
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "laravel-vite-plugin": "^0.5.0",
+    "vite": "^3.0.0"
+  },
+  "devDependencies": {
+    "sass": "^1.32.0",
+    "sass-loader": "^10.1.0"
+  }
+}

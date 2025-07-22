@@ -1,0 +1,103 @@
+// filepath: mini-erp-laravel/mini-erp-laravel/database/seeders/DatabaseSeeder.php
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    public function run()
+    {
+        $this->call([
+            ProductSeeder::class,
+            OrderSeeder::class,
+            CouponSeeder::class,
+            StockSeeder::class,
+        ]);
+    }
+}
+
+// filepath: mini-erp-laravel/mini-erp-laravel/database/seeders/ProductSeeder.php
+use Illuminate\Database\Seeder;
+use App\Models\Product;
+
+class ProductSeeder extends Seeder
+{
+    public function run()
+    {
+        Product::create([
+            'name' => 'Product 1',
+            'price' => 100.00,
+            'description' => 'Description for Product 1',
+            'stock' => 50,
+        ]);
+
+        Product::create([
+            'name' => 'Product 2',
+            'price' => 150.00,
+            'description' => 'Description for Product 2',
+            'stock' => 30,
+        ]);
+    }
+}
+
+// filepath: mini-erp-laravel/mini-erp-laravel/database/seeders/OrderSeeder.php
+use Illuminate\Database\Seeder;
+use App\Models\Order;
+
+class OrderSeeder extends Seeder
+{
+    public function run()
+    {
+        Order::create([
+            'product_id' => 1,
+            'quantity' => 2,
+            'total' => 200.00,
+        ]);
+
+        Order::create([
+            'product_id' => 2,
+            'quantity' => 1,
+            'total' => 150.00,
+        ]);
+    }
+}
+
+// filepath: mini-erp-laravel/mini-erp-laravel/database/seeders/CouponSeeder.php
+use Illuminate\Database\Seeder;
+use App\Models\Coupon;
+
+class CouponSeeder extends Seeder
+{
+    public function run()
+    {
+        Coupon::create([
+            'code' => 'DISCOUNT10',
+            'discount' => 10,
+            'expires_at' => now()->addDays(30),
+        ]);
+
+        Coupon::create([
+            'code' => 'DISCOUNT20',
+            'discount' => 20,
+            'expires_at' => now()->addDays(30),
+        ]);
+    }
+}
+
+// filepath: mini-erp-laravel/mini-erp-laravel/database/seeders/StockSeeder.php
+use Illuminate\Database\Seeder;
+use App\Models\Stock;
+
+class StockSeeder extends Seeder
+{
+    public function run()
+    {
+        Stock::create([
+            'product_id' => 1,
+            'quantity' => 50,
+        ]);
+
+        Stock::create([
+            'product_id' => 2,
+            'quantity' => 30,
+        ]);
+    }
+}
