@@ -18,13 +18,29 @@ class CheckoutController extends Controller
             return $item['price'] * $item['quantity'];
         });
         $frete = 20;
-        if ($subtotal >= 52 && $subtotal <= 166.59) {
-            $frete = 15;
-        } elseif ($subtotal > 200) {
+        if ($subtotal >= 200) {
             $frete = 0;
+        } elseif ($subtotal >= 52 && $subtotal < 166.6) {
+            $frete = 15;
         }
-        $total = $subtotal + $frete;
-        return view('checkout.show', compact('cart', 'subtotal', 'frete', 'total'));
+        // Lógica de cupom
+        $appliedCoupon = session('applied_coupon');
+        $discount = 0;
+        $couponCode = null;
+        if ($appliedCoupon) {
+            $couponCode = $appliedCoupon['code'] ?? null;
+            if (isset($appliedCoupon['discount'])) {
+                if (strpos($appliedCoupon['discount'], '%') !== false) {
+                    $percent = floatval(str_replace('%', '', $appliedCoupon['discount']));
+                    $discount = ($subtotal * $percent) / 100;
+                } else {
+                    $discount = floatval($appliedCoupon['discount']);
+                }
+                $discount = min($discount, $subtotal);
+            }
+        }
+        $total = $subtotal + $frete - $discount;
+        return view('checkout.show', compact('cart', 'subtotal', 'frete', 'discount', 'total', 'couponCode'));
     }
 
     public function process(Request $request)
@@ -46,7 +62,21 @@ class CheckoutController extends Controller
         } elseif ($subtotal >= 52 && $subtotal < 166.6) {
             $frete = 15;
         }
-        $total = $subtotal + $frete;
+        // Lógica de cupom
+        $appliedCoupon = session('applied_coupon');
+        $discount = 0;
+        if ($appliedCoupon) {
+            if (isset($appliedCoupon['discount'])) {
+                if (strpos($appliedCoupon['discount'], '%') !== false) {
+                    $percent = floatval(str_replace('%', '', $appliedCoupon['discount']));
+                    $discount = ($subtotal * $percent) / 100;
+                } else {
+                    $discount = floatval($appliedCoupon['discount']);
+                }
+                $discount = min($discount, $subtotal);
+            }
+        }
+        $total = $subtotal + $frete - $discount;
         // Validação de estoque
         foreach ($cart as $item) {
             $productId = $item['product_id'] ?? null;
