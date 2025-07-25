@@ -33,6 +33,11 @@
         <div>
           <strong>Frete:</strong> R$ {{ number_format($frete, 2, ',', '.') }}<br>
         </div>
+        @if(isset($discount) && $discount > 0)
+        <div>
+          <strong>Desconto:</strong> -R$ {{ number_format($discount, 2, ',', '.') }}<br>
+        </div>
+        @endif
         <div>
           <strong>Total:</strong> R$ {{ number_format($total, 2, ',', '.') }}
         </div>

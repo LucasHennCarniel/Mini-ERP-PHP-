@@ -16,11 +16,13 @@ class CartController extends Controller
         $subtotal = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
-        $frete = 20;
-        if ($subtotal >= 52 && $subtotal <= 166.59) {
-            $frete = 15;
-        } elseif ($subtotal > 200) {
+        $subtotal = round((float)$subtotal, 2);
+        if ($subtotal >= 200) {
             $frete = 0;
+        } elseif ($subtotal >= 52) {
+            $frete = 15;
+        } else {
+            $frete = 20;
         }
         // Lógica de cupom
         $appliedCoupon = session('applied_coupon');

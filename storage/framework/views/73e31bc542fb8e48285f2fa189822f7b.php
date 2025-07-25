@@ -33,6 +33,11 @@
         <div>
           <strong>Frete:</strong> R$ <?php echo e(number_format($frete, 2, ',', '.')); ?><br>
         </div>
+        <?php if(isset($discount) && $discount > 0): ?>
+        <div>
+          <strong>Desconto:</strong> -R$ <?php echo e(number_format($discount, 2, ',', '.')); ?><br>
+        </div>
+        <?php endif; ?>
         <div>
           <strong>Total:</strong> R$ <?php echo e(number_format($total, 2, ',', '.')); ?>
 
