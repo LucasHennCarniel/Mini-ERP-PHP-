@@ -11,7 +11,9 @@ class CartController extends Controller
     public function index()
     {
         $cart = session('cart', []);
-        $subtotal = collect($cart)->sum(function($item) {
+        // Filtra apenas arrays válidos (evita erro de tipo caso haja string ou valor antigo)
+        $cart = array_filter($cart, 'is_array');
+        $subtotal = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
         $frete = 20;
@@ -20,26 +22,57 @@ class CartController extends Controller
         } elseif ($subtotal > 200) {
             $frete = 0;
         }
-        $total = $subtotal + $frete;
-        return view('cart.index', compact('cart', 'subtotal', 'frete', 'total'));
+        // Lógica de cupom
+        $appliedCoupon = session('applied_coupon');
+        $discount = 0;
+        $couponCode = null;
+        if ($appliedCoupon) {
+            $couponCode = $appliedCoupon['code'] ?? null;
+            // Suporte a desconto percentual e fixo
+            if (isset($appliedCoupon['discount'])) {
+                if (strpos($appliedCoupon['discount'], '%') !== false) {
+                    // Exemplo: "10%"
+                    $percent = floatval(str_replace('%', '', $appliedCoupon['discount']));
+                    $discount = ($subtotal * $percent) / 100;
+                } else {
+                    $discount = floatval($appliedCoupon['discount']);
+                }
+                // Não deixa desconto maior que o subtotal
+                $discount = min($discount, $subtotal);
+            }
+        }
+        $total = $subtotal + $frete - $discount;
+        return view('cart.index', compact('cart', 'subtotal', 'frete', 'discount', 'total', 'couponCode'));
     }
 
     public function add(Request $request)
     {
-        $product = Product::findOrFail($request->product_id);
-        $variation = $request->variation_id ? Variation::find($request->variation_id) : null;
         $cart = session('cart', []);
-        $key = $product->id . '-' . ($variation ? $variation->id : '0');
-        if (isset($cart[$key])) {
-            $cart[$key]['quantity'] += $request->quantity;
-        } else {
-            $cart[$key] = [
-                'product_id' => $product->id,
-                'variation_id' => $variation ? $variation->id : null,
-                'name' => $product->name . ($variation ? ' - ' . $variation->name : ''),
-                'price' => $product->price,
-                'quantity' => $request->quantity,
-            ];
+        // Filtra apenas arrays válidos (evita erro de tipo caso haja string ou valor antigo)
+        $cart = array_filter($cart, 'is_array');
+        $productId = $request->input('product_id');
+        if ($productId) {
+            $product = Product::find($productId);
+            if ($product) {
+                // Busca se já existe no carrinho
+                $found = false;
+                foreach ($cart as &$item) {
+                    if (isset($item['product_id']) && $item['product_id'] == $productId) {
+                        $item['quantity'] += 1;
+                        $found = true;
+                        break;
+                    }
+                }
+                unset($item);
+                if (!$found) {
+                    $cart[] = [
+                        'product_id' => $product->id,
+                        'name' => $product->name,
+                        'price' => $product->price,
+                        'quantity' => 1
+                    ];
+                }
+            }
         }
         session(['cart' => $cart]);
         return redirect()->route('cart.index');
@@ -56,6 +89,21 @@ class CartController extends Controller
     public function clear()
     {
         session()->forget('cart');
+        session()->forget('applied_coupon'); // Limpa cupom ao esvaziar carrinho
         return redirect()->route('cart.index');
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        $request->validate([
+            'coupon_code' => 'required|string',
+        ]);
+        $coupon = \App\Models\Coupon::where('code', $request->coupon_code)->first();
+        if ($coupon) {
+            session(['applied_coupon' => $coupon->toArray()]);
+            return redirect()->back()->with('success', 'Cupom aplicado com sucesso!');
+        } else {
+            return redirect()->back()->with('error', 'Cupom inválido ou não encontrado.');
+        }
     }
 }

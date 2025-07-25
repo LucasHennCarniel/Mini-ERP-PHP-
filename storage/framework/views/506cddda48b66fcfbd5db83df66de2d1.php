@@ -5,15 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini ERP Laravel</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    
-
-    <?php $__env->startSection('content'); ?>
-    <div class="container mt-5">
-        <h1>Bem-vindo ao Mini ERP Laravel</h1>
-        <p>Projeto restaurado com sucesso!</p>
+    <div class="container background-branco">
+        <div class="main">
+            <div class="flex flex_c">
+                
+                <?php $__env->startSection('content'); ?>
+            </div>
+        </div>
     </div>
+    <div class="container">
+        <div class="main">
+            <div class="welcome-message">
+                <div>Bem-vindo ao Mini ERP!</div>
+               
+            </div>
+        </div>
+    </div>
+    
     <?php $__env->stopSection(); ?>
 </body>
 </html>

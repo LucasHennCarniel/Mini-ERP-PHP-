@@ -1,43 +1,55 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Pedidos</title>
-</head>
-<body>
-    <div>
-        <h1>Gerenciar Pedidos</h1>
-        <a href="{{ route('orders.create') }}">Criar Novo Pedido</a>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Produto</th>
-                    <th>Quantidade</th>
-                    <th>Preço</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($orders as $order)
-                <tr>
-                    <td>{{ $order->id }}</td>
-                    <td>{{ $order->product->name }}</td>
-                    <td>{{ $order->quantity }}</td>
-                    <td>{{ number_format($order->price, 2, ',', '.') }}</td>
-                    <td>
-                        <a href="{{ route('orders.edit', $order->id) }}">Editar</a>
-                        <form action="{{ route('orders.destroy', $order->id) }}" method="POST">
+@extends('layouts.app')
+@section('content')
+<div>
+    <h1 class="titleProducts" style="margin-bottom: 24px;">
+        <img src="/css/img/pacote.png" style="height:24px;" alt="Pedidos">
+        Gerenciar Pedidos
+    </h1>
+    <a class="new-product" href="{{ route('orders.create') }}" style="width:13%;"> + Criar Novo Pedido</a>
+    <table class="table-products">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Produto(s)</th>
+                <th>Quantidade</th>
+                <th>Preço Total</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($orders as $order)
+            <tr>
+                <td style="vertical-align: middle;">{{ $order->id }}</td>
+                <td style="vertical-align: middle;">{{ $order->nome }}</td>
+                <td style="vertical-align: middle;">
+                    @if($order->products && $order->products->count())
+                        {{ $order->products->pluck('name')->implode(', ') }}
+                    @else
+                        -
+                    @endif
+                </td>
+                <td style="vertical-align: middle;">
+                    @if($order->products && $order->products->count())
+                        {{ $order->products->sum('pivot.quantity') }}
+                    @else
+                        -
+                    @endif
+                </td>
+                <td style="vertical-align: middle;">R$ {{ number_format($order->total ?? 0, 2, ',', '.') }}</td>
+                <td style="vertical-align: middle; white-space: nowrap;">
+                    <div style="display: flex; gap: 16px; align-items: center; justify-content: center;">
+                        <a href="{{ route('orders.edit', $order->id) }}" class="action-link edit">Editar</a>
+                        <form action="{{ route('orders.destroy', $order->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit">Excluir</button>
+                            <button type="submit" class="action-link delete">Excluir</button>
                         </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
+                    </div>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+@endsection

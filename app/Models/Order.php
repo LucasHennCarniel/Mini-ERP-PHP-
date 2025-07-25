@@ -10,11 +10,17 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'customer_name',
-        'customer_email',
-        'total_amount',
-        'status',
-        'coupon_id',
+        'nome',
+        'email',
+        'cep',
+        'endereco',
+        'numero',
+        'bairro',
+        'cidade',
+        'uf',
+        'subtotal',
+        'freight',
+        'total',
     ];
 
     public function coupon()

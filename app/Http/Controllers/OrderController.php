@@ -35,6 +35,15 @@ class OrderController extends Controller
         return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
     }
 
+    public function destroy(Order $order)
+    {
+        // Remove o relacionamento com produtos (tabela pivô)
+        $order->products()->detach();
+        // Exclui o pedido
+        $order->delete();
+        return redirect()->route('orders.index')->with('success', 'Pedido excluído com sucesso.');
+    }
+
     public function calculateShipping($subtotal)
     {
         // Implement shipping calculation logic here

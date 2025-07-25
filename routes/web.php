@@ -22,14 +22,15 @@ Route::resource('orders', OrderController::class);
 Route::resource('products', ProductController::class);
 
 // Routes for Stocks
-Route::resource('stocks', StockController::class)->only(['index']);
+Route::resource('stocks', StockController::class);
 
 // Rotas do carrinho
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('cart/remove/{key}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::post('cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon');
 
-// Rotas do checkout
+// Rotas do checkoutS
 Route::get('checkout', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('checkout', [CheckoutController::class, 'process'])->name('checkout.process');

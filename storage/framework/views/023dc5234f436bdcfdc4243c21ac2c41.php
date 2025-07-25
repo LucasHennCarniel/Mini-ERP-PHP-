@@ -1,14 +1,16 @@
 
-
 <?php $__env->startSection('content'); ?>
 <div>
-    <h1>Carrinho</h1>
-    <table>
+    <h1 class="titleProducts" style="margin-bottom: 24px;">
+        <img src="/css/img/pacote.png" style="height:24px;" alt="Carrinho">
+        Carrinho
+    </h1>
+    <table class="table-products">
         <thead>
             <tr>
                 <th>Produto</th>
-                <th>Quantidade</th>
                 <th>Preço</th>
+                <th>Quantidade</th>
                 <th>Subtotal</th>
                 <th>Ações</th>
             </tr>
@@ -16,31 +18,56 @@
         <tbody>
             <?php $__currentLoopData = $cart; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
-                <td><?php echo e($item['name']); ?></td>
-                <td><?php echo e($item['quantity']); ?></td>
-                <td>R$ <?php echo e(number_format($item['price'], 2, ',', '.')); ?></td>
-                <td>R$ <?php echo e(number_format($item['price'] * $item['quantity'], 2, ',', '.')); ?></td>
-                <td>
-                    <form action="<?php echo e(route('cart.remove', $key)); ?>" method="POST">
-                        <?php echo csrf_field(); ?>
-                        <button>Remover</button>
-                    </form>
+                <td style="vertical-align: middle;"><?php echo e($item['name']); ?></td>
+                <td style="vertical-align: middle;">R$ <?php echo e(number_format($item['price'], 2, ',', '.')); ?></td>
+                <td style="vertical-align: middle;"><?php echo e($item['quantity']); ?></td>
+                <td style="vertical-align: middle;">R$ <?php echo e(number_format($item['price'] * $item['quantity'], 2, ',', '.')); ?></td>
+                <td style="vertical-align: middle; white-space: nowrap;">
+                    <div style="display: flex; gap: 0; align-items: center; justify-content: center;">
+                        <form action="<?php echo e(route('cart.remove', $key)); ?>" method="POST" style="display:inline-block; margin:0; padding:0;">
+                            <?php echo csrf_field(); ?>
+                            <button type="submit" class="action-link delete" style="padding:0 8px; min-width:unset;">Remover</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
     </table>
-    <div>
-        <strong>Subtotal:</strong> R$ <?php echo e(number_format($subtotal, 2, ',', '.')); ?><br>
-        <strong>Frete:</strong> R$ <?php echo e(number_format($frete, 2, ',', '.')); ?><br>
-        <strong>Total:</strong> R$ <?php echo e(number_format($total, 2, ',', '.')); ?>
+    <div class="flex flex_c gap10" style="margin-top: 24px;">
+        <div>
+            <strong>Subtotal:</strong> R$ <?php echo e(number_format($subtotal, 2, ',', '.')); ?><br>
+        </div>
+        
+        <div>
+             <strong>Frete:</strong> R$ <?php echo e(number_format($frete, 2, ',', '.')); ?><br>
+        </div>
+        <div>
+            <?php if(isset($discount) && $discount > 0): ?>
+            <strong>Desconto <?php if(isset($couponCode) && $couponCode): ?> (Cupom: <?php echo e($couponCode); ?>) <?php endif; ?>:</strong> -R$ <?php echo e(number_format($discount, 2, ',', '.')); ?><br>
+            <?php endif; ?>
+        </div>
+        <div>
+            <strong>Total:</strong> R$ <?php echo e(number_format($total, 2, ',', '.')); ?>
 
+        </div>
+        
     </div>
-    <form action="<?php echo e(route('cart.clear')); ?>" method="POST">
-        <?php echo csrf_field(); ?>
-        <button>Esvaziar Carrinho</button>
-    </form>
-    <a href="<?php echo e(route('checkout.show')); ?>">Finalizar Pedido</a>
+    <div style="margin-top: 32px; margin-bottom: 16px;">
+        <form action="<?php echo e(route('cart.applyCoupon')); ?>" method="POST" style="display: flex; gap: 12px; align-items: center; max-width: 400px;">
+            <?php echo csrf_field(); ?>
+            <input type="text" name="coupon_code" placeholder="Código do cupom" required style="flex:1; padding:8px; border-radius:6px; border:1px solid #ccc;">
+            <button type="submit" class="new-product" style="min-width:120px;">Aplicar Cupom</button>
+        </form>
+    </div>
+    <div class="flex gap20 middle" >
+        <form action="<?php echo e(route('cart.clear')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <button class="btn-red" type="submit" style="widthwidth:13%;">Esvaziar Carrinho</button>
+        </form>
+        <a href="<?php echo e(route('checkout.show')); ?>" class="new-product finish-btn">Finalizar Compra</a>
+    </div>
+   
 </div>
 <?php $__env->stopSection(); ?>
 

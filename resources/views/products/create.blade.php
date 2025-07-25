@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <h1>Novo Produto</h1>
@@ -32,10 +31,7 @@
 <script>
 let variationIndex = 1;
 function addVariation() {
-    let html = `<div class=\"variation mb-2\">
-        <input type=\"text\" name=\"variations[${variationIndex}][name]\" placeholder=\"Nome da variação\">
-        <button type=\"button\" onclick=\"removeVariation(this)\">Remover</button>
-    </div>`;
+    let html = `<div class=\"variation mb-2\">\n        <input type=\"text\" name=\"variations[${variationIndex}][name]\" placeholder=\"Nome da variação\">\n        <button type=\"button\" onclick=\"removeVariation(this)\">Remover</button>\n    </div>`;
     document.getElementById('variations').insertAdjacentHTML('beforeend', html);
     variationIndex++;
 }

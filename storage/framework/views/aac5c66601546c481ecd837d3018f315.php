@@ -1,11 +1,14 @@
 
-
 <?php $__env->startSection('content'); ?>
 <div>
-    <h1>Produtos</h1>
-    <div>
-        <a href="<?php echo e(route('products.create')); ?>">Novo Produto</a>
-        <a href="<?php echo e(route('cart.index')); ?>">Ver Carrinho</a>
+    <h1 class="titleProducts">
+        <img src="/css/img/pacote.png" style="height:24px;" alt="Produtos">
+        Produtos
+    </h1>
+    <div class="new-product-cart"> 
+        <a class="new-product" href="<?php echo e(route('products.create')); ?>">
+            + Novo  Produto</a>
+        <a href="<?php echo e(route('cart.index')); ?>" class="cart">Ver Carrinho</a>
     </div>
     <?php if(session('success')): ?>
         <div><?php echo e(session('success')); ?></div>
@@ -13,9 +16,10 @@
     <?php if(session('pedido_finalizado')): ?>
         <div><?php echo e(session('pedido_finalizado')); ?></div>
     <?php endif; ?>
-    <table>
+    <table class="table-products">
         <thead>
             <tr>
+                <th style="width:40px; text-align:center;">Selecionar</th>
                 <th>Nome</th>
                 <th>Preço</th>
                 <th>Variações</th>
@@ -25,34 +29,34 @@
         <tbody>
             <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
-                <td><?php echo e($product->name); ?></td>
-                <td>R$ <?php echo e(number_format($product->price, 2, ',', '.')); ?></td>
-                <td>
-                    <?php $__currentLoopData = $product->variations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $variation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div>
-                            <?php echo e($variation->name); ?> (Estoque: <?php echo e($variation->stock); ?>)
-                            <form action="<?php echo e(route('cart.add')); ?>" method="POST">
-                                <?php echo csrf_field(); ?>
-                                <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
-                                <input type="hidden" name="variation_id" value="<?php echo e($variation->id); ?>">
-                                <input type="number" name="quantity" value="1" min="1">
-                                <button>Comprar</button>
-                            </form>
-                        </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <td style="text-align:center; vertical-align: middle;">
+                    <input type="checkbox" style="width:18px; height:18px;">
                 </td>
-                <td>
-                    <a href="<?php echo e(route('products.edit', $product)); ?>">Editar</a>
-                    <form action="<?php echo e(route('products.destroy', $product)); ?>" method="POST">
-                        <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                        <button onclick="return confirm('Tem certeza?')">Excluir</button>
-                    </form>
-                    <form action="<?php echo e(route('cart.add')); ?>" method="POST">
-                        <?php echo csrf_field(); ?>
-                        <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
-                        <input type="hidden" name="quantity" value="1">
-                        <button>Comprar Produto</button>
-                    </form>
+                <td style="vertical-align: middle;"><?php echo e($product->name); ?></td>
+                <td style="vertical-align: middle;">R$ <?php echo e(number_format($product->price, 2, ',', '.')); ?></td>
+                <td style="vertical-align: middle;">
+                    <?php if(count($product->variations)): ?>
+                        <?php $__currentLoopData = $product->variations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $variation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <span><?php echo e($variation->name); ?> (Estoque: <?php echo e($variation->stock); ?>)</span><br>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php else: ?>
+                        -
+                    <?php endif; ?>
+                </td>
+                <td style="vertical-align: middle; white-space: nowrap;">
+                    <div style="display: flex; gap: 16px; align-items: center; justify-content: center;">
+                        <a href="<?php echo e(route('products.edit', $product->id)); ?>" class="action-link edit">Editar</a>
+                        <form action="<?php echo e(route('cart.add', $product->id)); ?>" method="POST" style="display:inline;">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="product_id" value="<?php echo e($product->id); ?>">
+                            <button type="submit" class="action-link add" style="color: #388e3c;">Adicionar ao Carrinho</button>
+                        </form>
+                        <form action="<?php echo e(route('products.destroy', $product->id)); ?>" method="POST" style="display:inline;">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('DELETE'); ?>
+                            <button type="submit" class="action-link delete" onclick="return confirm('Tem certeza que deseja excluir este produto?')">Excluir</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
