@@ -85,6 +85,7 @@ class CartController extends Controller
         $cart = session('cart', []);
         unset($cart[$key]);
         session(['cart' => $cart]);
+        session()->forget('applied_coupon'); // Limpa cupom ao remover item
         return redirect()->route('cart.index');
     }
 
