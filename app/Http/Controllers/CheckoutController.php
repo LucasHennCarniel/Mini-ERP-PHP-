@@ -41,10 +41,10 @@ class CheckoutController extends Controller
             return $item['price'] * $item['quantity'];
         });
         $frete = 20;
-        if ($subtotal >= 52 && $subtotal <= 166.59) {
-            $frete = 15;
-        } elseif ($subtotal > 200) {
+        if ($subtotal >= 200) {
             $frete = 0;
+        } elseif ($subtotal >= 52 && $subtotal < 166.6) {
+            $frete = 15;
         }
         $total = $subtotal + $frete;
         // Validação de estoque
