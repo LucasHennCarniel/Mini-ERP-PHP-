@@ -31,6 +31,7 @@ Route::post('cart/remove/{key}', [CartController::class, 'remove'])->name('cart.
 Route::post('cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::post('cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.applyCoupon');
 
-// Rotas do checkoutS
+// Rotas do checkout
 Route::get('checkout', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::get('checkout/sucesso', [CheckoutController::class, 'success'])->name('orders.success');

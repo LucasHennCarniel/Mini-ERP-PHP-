@@ -1,7 +1,8 @@
 @component('mail::message')
 # Olá, {{ $pedido['nome'] }}!
 
-Seu pedido foi realizado com sucesso. Confira os detalhes abaixo:
+Seu pedido de número <strong>{{ $pedido['order_id'] }}</strong> foi finalizado com sucesso.
+Confira os detalhes abaixo:
 
 ## Dados do Pedido
 - <strong>Nome:</strong> {{ $pedido['nome'] }}

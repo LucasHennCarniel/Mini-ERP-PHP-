@@ -112,13 +112,28 @@ class CheckoutController extends Controller
             $stock->quantity -= $item['quantity'];
             $stock->save();
         }
-        // Enviar e-mail de confirmação para o e-mail fixo de teste
-        \Mail::to('lucashennc@gmail.com')->send(new \App\Mail\PedidoRealizadoMail([
-            'nome' => $request->nome,
-            'email' => $request->email,
-        ], $cart, $subtotal, $frete, $total));
+        // Enviar e-mail de confirmação para o e-mail do cliente
+        $pedido = [
+            'nome'     => $request->nome,
+            'email'    => $request->email,
+            'endereco' => $request->endereco,
+            'numero'   => $request->numero,
+            'bairro'   => $request->bairro,
+            'cidade'   => $request->cidade,
+            'uf'       => $request->uf,
+            'cep'      => $request->cep,
+            'order_id' => $order->id, // Passa o número do pedido
+        ];
+        \Mail::to($request->email)->send(new \App\Mail\PedidoRealizadoMail(
+            $pedido, $cart, $subtotal, $frete, $total
+        ));
         session()->forget('cart');
         session()->forget('applied_coupon'); // Limpa cupom após finalizar pedido
-        return redirect()->route('orders.index')->with('pedido_finalizado', 'Pedido finalizado com sucesso!');
+        return redirect()->route('orders.success');
+    }
+
+    public function success()
+    {
+        return view('orders.success');
     }
 }
