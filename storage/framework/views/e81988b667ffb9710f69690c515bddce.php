@@ -1,7 +1,8 @@
 <?php $__env->startComponent('mail::message'); ?>
 # Olá, <?php echo e($pedido['nome']); ?>!
 
-Seu pedido foi realizado com sucesso. Confira os detalhes abaixo:
+Seu pedido de número <strong><?php echo e($pedido['order_id']); ?></strong> foi finalizado com sucesso.
+Confira os detalhes abaixo:
 
 ## Dados do Pedido
 - <strong>Nome:</strong> <?php echo e($pedido['nome']); ?>
