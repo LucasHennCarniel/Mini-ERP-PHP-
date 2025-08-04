@@ -65,7 +65,11 @@
             <?php echo csrf_field(); ?>
             <button class="btn-red" type="submit" style="widthwidth:13%;">Esvaziar Carrinho</button>
         </form>
-        <a href="<?php echo e(route('checkout.show')); ?>" class="new-product finish-btn">Finalizar Compra</a>
+        <?php if(empty($cart) || count($cart) == 0): ?>
+            <button class="new-product finish-btn" disabled style="opacity:0.6;cursor:not-allowed;">Finalizar Compra</button>
+        <?php else: ?>
+            <a href="<?php echo e(route('checkout.show')); ?>" class="new-product finish-btn">Finalizar Compra</a>
+        <?php endif; ?>
     </div>
    
 </div>

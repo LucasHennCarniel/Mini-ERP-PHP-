@@ -1,1 +1,1 @@
-a:3:{s:6:"_token";s:40:"jP7YB8WpLtt6LUzesFAIEgpp6OnMowEewJyR7tJN";s:9:"_previous";a:1:{s:3:"url";s:37:"http://mini-erp-laravel.test/products";}s:6:"_flash";a:2:{s:3:"old";a:0:{}s:3:"new";a:0:{}}}
+a:4:{s:6:"_token";s:40:"jP7YB8WpLtt6LUzesFAIEgpp6OnMowEewJyR7tJN";s:9:"_previous";a:1:{s:3:"url";s:33:"http://mini-erp-laravel.test/cart";}s:6:"_flash";a:2:{s:3:"old";a:0:{}s:3:"new";a:0:{}}s:4:"cart";a:1:{i:0;a:4:{s:10:"product_id";i:15;s:4:"name";s:6:"teste4";s:5:"price";s:6:"200.00";s:8:"quantity";i:1;}}}

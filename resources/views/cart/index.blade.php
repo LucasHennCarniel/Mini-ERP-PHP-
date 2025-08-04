@@ -64,7 +64,11 @@
             @csrf
             <button class="btn-red" type="submit" style="widthwidth:13%;">Esvaziar Carrinho</button>
         </form>
-        <a href="{{ route('checkout.show') }}" class="new-product finish-btn">Finalizar Compra</a>
+        @if(empty($cart) || count($cart) == 0)
+            <button class="new-product finish-btn" disabled style="opacity:0.6;cursor:not-allowed;">Finalizar Compra</button>
+        @else
+            <a href="{{ route('checkout.show') }}" class="new-product finish-btn">Finalizar Compra</a>
+        @endif
     </div>
    
 </div>
