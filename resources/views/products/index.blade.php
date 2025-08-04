@@ -11,7 +11,15 @@
         <a href="{{ route('cart.index') }}" class="cart">Ver Carrinho</a>
     </div>
     @if(session('success'))
-        <div>{{ session('success') }}</div>
+        <div id="popup-alert" style="position:fixed;top:30px;left:50%;transform:translateX(-50%);z-index:9999;min-width:320px;max-width:90vw;background:#28a745;color:#fff;padding:18px 32px;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.15);font-size:1.1rem;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.5rem;">&#10003;</span>
+            <span>{{ session('success') }}</span>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('popup-alert').style.display = 'none';
+            }, 2500);
+        </script>
     @endif
     @if(session('pedido_finalizado'))
         <div>{{ session('pedido_finalizado') }}</div>

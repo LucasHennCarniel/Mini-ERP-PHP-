@@ -77,6 +77,9 @@ class CartController extends Controller
             }
         }
         session(['cart' => $cart]);
+        if (isset($product)) {
+            return redirect()->back()->with('success', 'Produto ' . $product->name . ' adicionado ao carrinho!');
+        }
         return redirect()->route('cart.index');
     }
 
