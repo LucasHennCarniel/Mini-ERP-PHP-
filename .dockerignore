@@ -1,0 +1,15 @@
+node_modules
+npm-debug.log
+vendor
+.git
+.gitignore
+README.md
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+docker-compose.override.yml
+.DS_Store
+Thumbs.db

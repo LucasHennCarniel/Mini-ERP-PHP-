@@ -1,0 +1,107 @@
+🐳 PRIMEIRO USO DO DOCKER - PASSO A PASSO
+
+═══════════════════════════════════════════════════════════════
+🎯 ETAPA 1: VERIFICAR SE DOCKER ESTÁ FUNCIONANDO
+═══════════════════════════════════════════════════════════════
+
+1. Abra o PowerShell como Administrador
+2. Digite: docker --version
+3. Digite: docker-compose --version
+
+Se aparecer a versão, está funcionando! ✅
+
+═══════════════════════════════════════════════════════════════
+🎯 ETAPA 2: PREPARAR O PROJETO
+═══════════════════════════════════════════════════════════════
+
+1. Abra o PowerShell na pasta do projeto:
+   cd C:\laragon\www\mini-erp-laravel
+
+2. Copie o arquivo de ambiente:
+   copy .env.docker .env
+
+3. (Opcional) Gere uma nova chave:
+   php artisan key:generate
+
+═══════════════════════════════════════════════════════════════
+🎯 ETAPA 3: PRIMEIRA EXECUÇÃO
+═══════════════════════════════════════════════════════════════
+
+1. Execute o comando (vai demorar na primeira vez):
+   docker-compose up -d
+
+   O que acontece:
+   ⏳ Baixa imagens do Docker Hub (MySQL, phpMyAdmin, Redis)
+   🔨 Constrói sua aplicação Laravel
+   🚀 Inicia todos os containers
+
+2. Aguarde a mensagem: "Container mini-erp-app Started"
+
+═══════════════════════════════════════════════════════════════
+🎯 ETAPA 4: VERIFICAR SE FUNCIONOU
+═══════════════════════════════════════════════════════════════
+
+1. Verifique containers rodando:
+   docker ps
+
+   Deve mostrar 4 containers:
+   ✅ mini-erp-app
+   ✅ mini-erp-mysql  
+   ✅ mini-erp-phpmyadmin
+   ✅ mini-erp-redis
+
+2. Teste os acessos:
+   🌐 http://localhost:8080     (Aplicação Laravel)
+   📊 http://localhost:8081     (phpMyAdmin)
+
+═══════════════════════════════════════════════════════════════
+🎯 ETAPA 5: EXECUTAR MIGRAÇÕES (SE NECESSÁRIO)
+═══════════════════════════════════════════════════════════════
+
+1. Entre no container da aplicação:
+   docker exec -it mini-erp-app bash
+
+2. Execute as migrações:
+   php artisan migrate
+
+3. Saia do container:
+   exit
+
+═══════════════════════════════════════════════════════════════
+🎯 COMANDOS ÚTEIS PARA O DIA A DIA
+═══════════════════════════════════════════════════════════════
+
+▶️ Iniciar:          docker-compose up -d
+⏹️ Parar:            docker-compose down
+📋 Ver logs:         docker-compose logs -f
+🔄 Reiniciar:        docker-compose restart
+🔨 Rebuild:          docker-compose up --build -d
+📊 Status:           docker ps
+
+═══════════════════════════════════════════════════════════════
+❌ SE ALGO DER ERRADO
+═══════════════════════════════════════════════════════════════
+
+1. Pare tudo:
+   docker-compose down
+
+2. Limpe o sistema:
+   docker system prune -f
+
+3. Tente novamente:
+   docker-compose up --build -d
+
+4. Veja os logs para debug:
+   docker-compose logs
+
+═══════════════════════════════════════════════════════════════
+📱 TESTANDO NO NAVEGADOR
+═══════════════════════════════════════════════════════════════
+
+✅ Aplicação funcionando: Deve mostrar a página do Laravel
+✅ phpMyAdmin funcionando: Deve mostrar tela de login
+   - Usuário: root
+   - Senha: rootpassword
+   - Servidor: mysql
+
+Agora você tem um ambiente completo rodando! 🎉

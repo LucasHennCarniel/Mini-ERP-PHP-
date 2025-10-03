@@ -112,6 +112,18 @@ class CheckoutController extends Controller
             $stock->quantity -= $item['quantity'];
             $stock->save();
         }
+        // Definir array $pedido com todos os dados necessários
+        $pedido = [
+            'nome'     => $request->nome,
+            'email'    => $request->email,
+            'endereco' => $request->endereco,
+            'numero'   => $request->numero,
+            'bairro'   => $request->bairro,
+            'cidade'   => $request->cidade,
+            'uf'       => $request->uf,
+            'cep'      => $request->cep,
+            'order_id' => $order->id,
+        ];
         // Enviar e-mail de confirmação para o e-mail do cliente
         try {
             \Mail::to($request->email)->send(new \App\Mail\PedidoRealizadoMail(
